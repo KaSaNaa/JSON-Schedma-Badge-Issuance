@@ -1,0 +1,32 @@
+name: Issue Badges
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+  workflow_dispatch:     # Allow manual triggers
+
+jobs:
+  issue-badges:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Create service account key file
+        run: echo '${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}' > service_account_key.json
+      
+      - name: Run badge issuance script
+        run: node index.js
+        env:
+          GOOGLE_SERVICE_ACCOUNT_KEY_PATH: ./service_account_key.json
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          BADGR_API_TOKEN: ${{ secrets.BADGR_API_TOKEN }}
+          BADGR_ISSUER_ID: ${{ secrets.BADGR_ISSUER_ID }}
+          BADGR_BADGE_CLASS_ID: ${{ secrets.BADGR_BADGE_CLASS_ID }}
