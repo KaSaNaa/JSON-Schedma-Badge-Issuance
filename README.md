@@ -112,6 +112,46 @@ The application includes:
 - Detailed error logging
 - Status tracking in the spreadsheet
 
+## GitHub Actions Workflow
+
+The worker.yml file defines a GitHub Actions workflow that automates the process of issuing badges. Here's a breakdown of how it works:
+
+## Workflow Triggers
+
+```yaml
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight
+  workflow_dispatch:     # Allow manual triggers
+```
+
+This workflow runs in two scenarios:
+
+- **Automatically**: Every day at midnight (UTC) using cron scheduling
+- **Manually**: Through the GitHub UI using workflow_dispatch
+
+## Job Configuration
+
+The workflow contains a single job called `issue-badges` that runs on an Ubuntu environment and executes several steps in sequence:
+
+1. **Checkout code** - Fetches your repository code
+2. **Setup Node.js** - Configures Node.js version 18
+3. **Install dependencies** - Runs `npm install` to get required packages
+4. **Create service account key** - Creates a file containing Google service account credentials from GitHub secrets
+5. **Run badge issuance script** - Executes your main script with necessary environment variables
+
+## Environment and Secrets
+
+The workflow uses several secrets stored in your GitHub repository:
+
+- `GOOGLE_SERVICE_ACCOUNT_KEY` - Google API credentials
+- `GOOGLE_SHEET_ID` - ID of the Google Sheet containing badge data
+- `BADGR_API_TOKEN` - Authentication token for Badgr API
+- `BADGR_ISSUER_ID` - Identifier for the badge issuer
+- `BADGR_BADGE_CLASS_ID` - Identifier for the specific badge type
+
+This setup enables secure, automated badge issuance that can connect to Google Sheets for recipient data and use the Badgr platform to award badges without manual intervention.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
