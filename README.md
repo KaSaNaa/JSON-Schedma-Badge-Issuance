@@ -15,46 +15,51 @@ This project automates the issuance of digital badges to users who complete the 
 
 ### Prerequisites
 
-- Node.js (v14 or higher)
+- Node.js (v16.x) - Specific version required
 - A Google Service Account with access to Google Sheets API
 - A Badgr API token
 - A Badgr Badge Class ID
 
-### Installation
+### Node.js Installation
 
-1. Clone this repository:
-   ```
-   git clone https://github.com/your-username/JSON-Schedma-Badge-Issuance.git
-   cd JSON-Schedma-Badge-Issuance
-   ```
+#### Windows
 
-2. Install dependencies:
-   ```
-   npm install
-   ```
+1. Download the Node.js v16.x installer from [official Node.js website](https://nodejs.org/dist/latest-v16.x/)
+2. Run the installer and follow the installation wizard
+3. Verify installation by opening Command Prompt and typing:
 
-3. Create a `.env` file with the following variables:
-   ```
-   # Badgr API credentials
-   BADGR_API_TOKEN=your_badgr_api_token
-   BADGR_BADGE_CLASS_ID=your_badge_class_id
-   BADGR_ISSUER_ID=your_issuer_id
-
-   # Google Sheets credentials
-   GOOGLE_SERVICE_ACCOUNT_KEY_PATH=/path/to/service-account-key.json
-   GOOGLE_SHEET_ID=your_google_sheet_id
-
-   # Optional configuration
-   BADGE_ISSUED_COLUMN=C
-   BADGE_ID_COLUMN=D
-   TIMESTAMP_COLUMN=E
-   ERROR_COLUMN=F
+   ```bash
+   node --version
+   npm --version
    ```
 
-4. Set up your Google Spreadsheet with at least these columns:
-   - Column A: Name
-   - Column B: Email
-   - Column C: Badge Issued (will be populated with "Yes" after issuance)
+#### Linux (Ubuntu/Debian)
+
+```bash
+# Using NVM (recommended)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+source ~/.bashrc
+nvm install 16
+nvm use 16
+
+# Or using apt
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+#### Linux (RHEL/CentOS/Fedora)
+
+```bash
+# Using NVM (recommended)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+source ~/.bashrc
+nvm install 16
+nvm use 16
+
+# Or using yum/dnf
+curl -fsSL https://rpm.nodesource.com/setup_16.x | sudo bash -
+sudo yum install -y nodejs
+```
 
 ### Google Service Account Setup
 
@@ -65,29 +70,42 @@ This project automates the issuance of digital badges to users who complete the 
 5. Create and download a JSON key file for the service account
 6. Share your Google Sheet with the service account email address (with editor permissions)
 
-## Usage
+### Project Installation
 
-Run the script to process all entries in the spreadsheet:
+1. Clone this repository:
 
-```bash
-node index.js
-```
+   ```bash
+   # For Windows
+   git clone https://github.com/KaSaNaa/JSON-Schedma-Badge-Issuance.git
+   cd JSON-Schedma-Badge-Issuance
+   
+   # For Linux
+   git clone https://github.com/KaSaNaa/JSON-Schedma-Badge-Issuance.git
+   cd JSON-Schedma-Badge-Issuance
+   ```
 
-### Scheduled Runs
+2. Install dependencies:
 
-To run the script periodically, you can set up a cron job. Example for running daily at midnight:
+   ```bash
+   npm install
+   ```
 
-```bash
-0 0 * * * cd /path/to/JSON-Schedma-Badge-Issuance && node index.js >> /path/to/logfile.log 2>&1
-```
+3. Create a `.env` file with the following variables:
 
-## Logging
+   ```env
+   # Badgr API credentials
+   BADGR_API_TOKEN=your_badgr_api_token
+   BADGR_BADGE_CLASS_ID=your_badge_class_id
+   BADGR_ISSUER_ID=your_issuer_id
 
-Logs are stored in the `logs` directory, with a new file created for each day. All operations and errors are logged for traceability.
+   # Google Sheets credentials
+   GOOGLE_SERVICE_ACCOUNT_KEY_PATH=./service_account_key.json
+   GOOGLE_SHEET_ID=your_google_sheet_id
 
-## Error Handling
+   # Optional configuration
 
 The application includes:
+
 - Input validation for all functions
 - Environment variable validation
 - Retry logic for API calls
